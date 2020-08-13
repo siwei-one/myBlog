@@ -39,11 +39,10 @@ public class BlogController {
 	// 这个是默认的访问，不带参数
 	@GetMapping("/blogs")
 	public String blogsDefault(Model model) {
-		Page<Blog> page = getPage(-1, false);
+		getPage(-1, false, model);
 
 		// 查出所有的type
 		List<Type> types = typeService.listType();
-		model.addAttribute("page", page);
 		model.addAttribute("types", types);
 
 		return "admin/blogs";
@@ -53,16 +52,12 @@ public class BlogController {
 	@PostMapping("/blogs/search")
 	public String blogs(Integer page, BlogQuery blog, Model model) {
 		if (blog == null) {
-			Page<Blog> page1 = getPage(page, true);
-			model.addAttribute("page", page1);
+			getPage(page, true, model);
 		} else {
 			if (page == null || page.intValue() <= 0) {
-				Page<Blog> page1 = getPageByQuery(blog, page, false);
-				model.addAttribute("page", page1);
-
+				getPageByQuery(blog, page, false, model);
 			} else {
-				Page<Blog> page1 = getPageByQuery(blog, page, true);
-				model.addAttribute("page", page1);
+				getPageByQuery(blog, page, true, model);
 			}
 		}
 
@@ -143,44 +138,33 @@ public class BlogController {
 	}
 
 
-	public Page<Blog> getPage(Integer page, boolean flag) {
+	public void getPage(Integer page, boolean flag, Model model) {
 		// 先 new Page
 		Page<Blog> page1 = new Page<Blog>();
 
-		page1.setSize(4);
+		page1.setSize(7);
 		// 先查出数据条数，再计算得出多少页
 		int total = blogService.getTotal();
-		int totalPages;
-		if (total % page1.getSize() == 0) {
-			totalPages = total / page1.getSize();
-		} else {
-			totalPages = total / page1.getSize() + 1;
-		}
-		page1.setTotalPages(totalPages);
+		page1.countTotalPages(total);
 
 		if (flag) {
 			page1.setPage(page);
 		}
 
 		page1.setContent(blogService.listBlogByParam(page1.getStart(), page1.getSize()));
+		
+		model.addAttribute("page", page1);
 
-		return page1;
 	}
 
-	public Page<Blog> getPageByQuery(BlogQuery blog, Integer page, boolean flag) {
+	public void getPageByQuery(BlogQuery blog, Integer page, boolean flag, Model model) {
 		// 先 new Page
 		Page<Blog> page1 = new Page<Blog>();
 
-		page1.setSize(4);
+		page1.setSize(7);
 		// 先查出数据条数，再计算得出多少页
 		int total = blogService.getTotalByParams(blog);
-		int totalPages;
-		if (total % page1.getSize() == 0) {
-			totalPages = total / page1.getSize();
-		} else {
-			totalPages = total / page1.getSize() + 1;
-		}
-		page1.setTotalPages(totalPages);
+		page1.countTotalPages(total);
 
 		if (flag) {
 			page1.setPage(page);
@@ -188,7 +172,7 @@ public class BlogController {
 
 		page1.setContent(blogService.getBlogByParams(blog, page1.getStart(), page1.getSize()));
 
-		return page1;
+		model.addAttribute("page", page1);
 
 	}
 

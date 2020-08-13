@@ -1,12 +1,13 @@
 package com.yuer.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Type {
+public class Type implements Serializable {
 	
-
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String typeName; // 类别名
 	

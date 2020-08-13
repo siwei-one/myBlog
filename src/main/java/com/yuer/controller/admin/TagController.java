@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.yuer.entity.Page;
@@ -20,20 +21,16 @@ public class TagController {
 	@Autowired
 	private ITagService tagService;
 
-	// 这个是默认的访问，不带参数
+
+	// page代表当前页数,当按上一页下一页会传page
 	@GetMapping("/tags")
-	public String tagsDefault(Model model) {
-		Page<Tag> page = getPage(-1, false);
-		model.addAttribute("page", page);
-
-		return "admin/tags";
-	}
-
-	// page代表当前页数,当按上一页下一页会触发这个方法
-	@GetMapping("/tags/{page}")
-	public String tags(@PathVariable Integer page, Model model) {
-		Page<Tag> page1 = getPage(page, true);
-		model.addAttribute("page", page1);
+	public String tags(@RequestParam(value = "page", required = false) Integer page, Model model) {
+		if (page == null || page == 0) {
+			getPage(-1, false,model);
+		} else {
+			getPage(page, true,model);
+			
+		}
 
 		return "admin/tags";
 	}
@@ -104,27 +101,22 @@ public class TagController {
 
 	}
 
-	public Page<Tag> getPage(Integer page, boolean flag) {
+	public void getPage(Integer page, boolean flag, Model model) {
 		// 先 new Page
 		Page<Tag> page1 = new Page<Tag>();
 
 		// 先查出数据条数，再计算得出多少页
 		int total = tagService.getTotal();
-		int totalPages;
-		if (total % page1.getSize() == 0) {
-			 totalPages = total / page1.getSize();
-		} else {
-			 totalPages = total / page1.getSize() + 1;
-		}
-		page1.setTotalPages(totalPages);
+		page1.countTotalPages(total);
 
 		if (flag) {
 			page1.setPage(page);
 		}
 
 		page1.setContent(tagService.listTagByParam(page1.getStart(), page1.getSize()));
+		
+		model.addAttribute("page", page1);
 
-		return page1;
 	}
 
 }

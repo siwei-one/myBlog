@@ -33,7 +33,7 @@ public class TagServiceImpl implements ITagService {
 	public Integer updateTag(Long id, String tagName) {
 		// 先查看此id是否存在
 		// 不存在就直接返回null
-		Tag t = tagDao.getTagById(id);
+		Tag t = tagDao.getTagByColumn("id",id + "");
 		if (t == null) {
 			return null;
 		}
@@ -44,7 +44,7 @@ public class TagServiceImpl implements ITagService {
 	@Transactional
 	@Override
 	public Tag getTagById(Long id) {
-		return tagDao.getTagById(id);
+		return tagDao.getTagByColumn("id",id + "");
 	}
 
 	@Transactional
@@ -81,7 +81,7 @@ public class TagServiceImpl implements ITagService {
 	@Transactional
 	@Override
 	public Tag getTagByTagName(String tagName) {
-		return tagDao.getTagByTagName(tagName);
+		return tagDao.getTagByColumn("tag_name",tagName);
 	}
 
 }

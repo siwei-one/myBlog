@@ -44,6 +44,7 @@ public class CommentController {
 			comment.setAdminComment(false);
 
 		}
+		
 
 		commentService.saveComment(comment);
 		return "redirect:/comments/" + comment.getBlog().getId();

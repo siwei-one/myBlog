@@ -1,14 +1,15 @@
 package com.yuer.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
-public class User {
+public class User implements Serializable {
 
 	
-
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String userName; // 用户名
 	private String nickName; // 昵称

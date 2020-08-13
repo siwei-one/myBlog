@@ -16,7 +16,7 @@ public interface IBlogService {
 	Integer saveBlog(Blog blog);
 
 	// 删除
-	void deleteBlog(Long id);
+	Integer deleteBlog(Long id);
 
 	// 改
 	Integer updateBlog(Blog blog);

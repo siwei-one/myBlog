@@ -36,6 +36,7 @@ public class CommentServiceImpl implements ICommentService {
 	public void circleGetComments(List<Comment> comments) {
 		
 		for (Comment comment : comments) {
+			// 获取顶级节点的所有次级节点
 			List<Comment> temps = commentDao.getComments(comment.getId());
 			
 			// 循环将该节点的所有下层节点加入replyComments

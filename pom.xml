@@ -17,6 +17,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<druid-version>RELEASE</druid-version>
 	</properties>
 
 	<dependencies>
@@ -98,6 +99,25 @@
 			<artifactId>commonmark-ext-heading-anchor</artifactId>
 			<version>0.14.0</version>
 		</dependency>
+
+		<!-- redis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
+		
+		<!-- Druid还提供了强大的监控功能：数据源、Url请求、sql执行效率、Web并发等等都能监控。Druid实在是排查慢sql、优化性能、监控项目居家必备良药！ -->
+		  <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid-version}</version>
+        </dependency>
+
 
 
 	</dependencies>

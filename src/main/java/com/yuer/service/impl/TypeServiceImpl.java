@@ -34,7 +34,7 @@ public class TypeServiceImpl implements ITypeService {
 	public Integer updateType(Long id, String typeName) {
 		// 先查看此id是否存在
 		// 不存在就直接返回null
-		Type t = typeDao.getTypeById(id);
+		Type t = typeDao.getTypeByColumn("id",id + "");
 		if (t == null) {
 			return null;
 		}
@@ -46,7 +46,7 @@ public class TypeServiceImpl implements ITypeService {
 	@Transactional
 	@Override
 	public Type getTypeById(Long id) {
-		return typeDao.getTypeById(id);
+		return typeDao.getTypeByColumn("id",id + "");
 	}
 
 	@Transactional
@@ -83,7 +83,7 @@ public class TypeServiceImpl implements ITypeService {
 	@Transactional
 	@Override
 	public Type getTypeByTypeName(String typeName) {
-		return typeDao.getTypeByTypeName(typeName);
+		return typeDao.getTypeByColumn("type_name", typeName);
 	}
 
 }

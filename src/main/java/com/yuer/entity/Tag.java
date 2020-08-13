@@ -1,13 +1,14 @@
 package com.yuer.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Tag {
+public class Tag implements Serializable {
 
 	
-
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String tagName; // 标签名
 	

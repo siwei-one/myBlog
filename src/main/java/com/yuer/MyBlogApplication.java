@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @MapperScan("com.yuer.dao")
 @SpringBootApplication
+
+//@EnableCaching // 这个用于支持redis
+// 先关闭redis
 public class MyBlogApplication {
 
 	public static void main(String[] args) {

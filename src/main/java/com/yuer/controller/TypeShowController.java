@@ -65,13 +65,7 @@ public class TypeShowController {
 		// 先查出数据条数，再计算得出多少页
 		int total = blogService.getTotalAndPublishedAndTypeId(id);
 		
-		int totalPages;
-		if (total % page1.getSize() == 0) {
-			totalPages = total / page1.getSize();
-		} else {
-			totalPages = total / page1.getSize() + 1;
-		}
-		page1.setTotalPages(totalPages);
+		page1.countTotalPages(total);
 		
 		if (flag) {
 			page1.setPage(page);

@@ -173,7 +173,7 @@
 
 /* 下面这四个属性用来做footer最下部的*/
 .m-body {
-	 display: flex;
+	display: flex;
     flex-direction: column;
     height: 100%;
 }

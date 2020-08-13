@@ -1,11 +1,15 @@
 package com.yuer.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Blog {
+public class Blog implements Serializable {
 
+	
+	private static final long serialVersionUID = 1L;
+	
 	private Long id;
 	private String title; // 博客标题
 	private String firstPicture; // 首图

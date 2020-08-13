@@ -148,13 +148,13 @@
 							<div class="ui middle aligned two column grid" >
 								<div class="column">
 									<!--basic将背景色转为字体色-->
-									<a href="#" class="ui mini teal basic button" th:href="@{/{page}(page=${page.page}-1)}" th:unless="${page.first}">上一页</a>
+									<a href="#" class="ui mini teal basic button" th:href="@{/(page=${page.page}-1)}" th:unless="${page.first}">上一页</a>
 								</div>
 								<!--right（segment中的） 需要和aligned一起使用，好像作为item则不需要
 									m-inline-block 自定义样式，将块级元素转为行级
 								-->
 								<div class="right aligned column">
-									<a href="#" class="ui mini teal basic button" th:href="@{/{page}(page=${page.page}+1)}" th:unless="${page.last}">下一页</a>
+									<a href="#" class="ui mini teal basic button" th:href="@{/(page=${page.page}+1)}" th:unless="${page.last}">下一页</a>
 								</div>
 							</div>
 
@@ -232,7 +232,7 @@
 						<h4 class="ui horizontal divider header m-margin-top-large ">扫码关注我</h4>
 						<!--centered 又来了一个居中（好像是用于有宽度的），好多哦，弄清楚区别(这里用center或者center aligned没效果)-->
 						<div class="ui centered card" style="width: 11em;">
-							<img src="../static/img/dragonCat3.gif"  th:src="@{/img/wechat.jpg}" alt="" class="ui rounded image" />
+							<img src="../static/img/dragonCat3.gif"  th:src="@{/img/wechat1.jpg}" alt="" class="ui rounded image" />
 						</div>
 					
 					</div>
@@ -272,8 +272,8 @@
 					<div class="three wide column">
 						<h4 class="ui inverted header m-text-thin m-text-spaced">联系我</h4>
 						<div class="ui inverted link list">
-							<a href="#" class="item m-text-thin">Email：lirenmi@163.com</a>
-							<a href="#" class="item m-text-thin">QQ：865729312</a>
+							<a href="#" class="item m-text-thin"></a>
+							<a href="#" class="item m-text-thin"></a>
 						</div>
 					</div>
 					<div class="seven wide column">

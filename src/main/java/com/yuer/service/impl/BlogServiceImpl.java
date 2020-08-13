@@ -85,7 +85,7 @@ public class BlogServiceImpl implements IBlogService {
 		if (tagIds != null && !"".equals(tagIds)) {
 			String[] ids = tagIds.split(",");
 			for (String id : ids) {
-				list.add(tagDao.getTagById(Long.parseLong(id)));
+				list.add(tagDao.getTagByColumn("id",id));
 			}
 
 		}
@@ -95,8 +95,13 @@ public class BlogServiceImpl implements IBlogService {
 
 	@Transactional
 	@Override
-	public void deleteBlog(Long id) {
-		blogDao.deleteBlog(id);
+	public Integer deleteBlog(Long id) {
+		// 先删除所有之前的关于该博客的标签再删除博客
+		int num = blogDao.deleteTags(id);
+		
+		num = blogDao.deleteBlog(id);
+
+		return num;
 
 	}
 
@@ -105,7 +110,7 @@ public class BlogServiceImpl implements IBlogService {
 	public Integer updateBlog(Blog blog) {
 		// 先查看此id是否存在
 		// 不存在就直接返回null
-		Blog t = blogDao.getBlogById(blog.getId());
+		Blog t = blogDao.getBlogByColumn("id",blog.getId() + "");
 		if (t == null) {
 			return null;
 		}
@@ -116,7 +121,7 @@ public class BlogServiceImpl implements IBlogService {
 	@Transactional
 	@Override
 	public Blog getBlogById(Long id) {
-		return blogDao.getBlogById(id);
+		return blogDao.getBlogByColumn("id",id + "");
 	}
 
 	@Transactional
@@ -131,9 +136,7 @@ public class BlogServiceImpl implements IBlogService {
 		List<Blog> list = blogDao.listBlogByParam(start, size);
 
 		// 根据list中blog的typeId查出再放入type
-		for (Blog b : list) {
-			b.setType(typeDao.getTypeById(b.getType().getId()));
-		}
+		setValues(list,0);
 
 		return list;
 	}
@@ -145,10 +148,7 @@ public class BlogServiceImpl implements IBlogService {
 
 		// 根据list中blog的typeId查出再放入type
 		// 还有User和Tag(这里暂时不需要显示tag)
-		for (Blog b : list) {
-			b.setType(typeDao.getTypeById(b.getType().getId()));
-			b.setUser(userDao.findById(b.getUser().getId()));
-		}
+		setValues(list,1);
 
 		return list;
 	}
@@ -168,7 +168,7 @@ public class BlogServiceImpl implements IBlogService {
 	@Transactional
 	@Override
 	public Blog getBlogByBlogName(String blogName) {
-		return blogDao.getBlogByBlogName(blogName);
+		return blogDao.getBlogByColumn("blog_name",blogName);
 	}
 
 	@Transactional
@@ -178,9 +178,7 @@ public class BlogServiceImpl implements IBlogService {
 		List<Blog> list = blogDao.getBlogByParams(blog, start, size);
 
 		// 根据list中blog的typeId查出再放入type
-		for (Blog b : list) {
-			b.setType(typeDao.getTypeById(b.getType().getId()));
-		}
+		setValues(list,0);
 
 		return list;
 	}
@@ -209,10 +207,7 @@ public class BlogServiceImpl implements IBlogService {
 		List<Blog> list = blogDao.listBlogBySerach(query, start, size);
 
 		// 根据list中blog的typeId查出再放入type
-		for (Blog b : list) {
-			b.setType(typeDao.getTypeById(b.getType().getId()));
-			b.setUser(userDao.findById(b.getUser().getId()));
-		}
+		setValues(list,1);
 		return list;
 	}
 
@@ -224,10 +219,7 @@ public class BlogServiceImpl implements IBlogService {
 		List<Blog> list = blogDao.listBlogByTypeId(id, start, size);
 
 		// 根据list中blog的typeId查出再放入type
-		for (Blog b : list) {
-			b.setType(typeDao.getTypeById(b.getType().getId()));
-			b.setUser(userDao.findById(b.getUser().getId()));
-		}
+		setValues(list,1);
 		return list;
 	}
 	
@@ -237,13 +229,7 @@ public class BlogServiceImpl implements IBlogService {
 		List<Blog> list = blogDao.listBlogByTagId(id, start, size);
 
 		// 这里应该就放tag和user?
-		for (Blog b : list) {
-			b.setType(typeDao.getTypeById(b.getType().getId()));
-			b.setUser(userDao.findById(b.getUser().getId()));
-			
-			// 这里得先根据博客名找到对应得tags
-			b.setTags(tagDao.listTagByBlogId(b.getId()));
-		}
+		setValues(list,2);
 		return list;
 	}
 
@@ -251,7 +237,7 @@ public class BlogServiceImpl implements IBlogService {
 	@Transactional
 	@Override
 	public Blog getAndConvert(Long id) {
-		Blog blog = blogDao.getBlogById(id);
+		Blog blog = blogDao.getBlogByColumn("id",id + "");
 
 		if (blog == null) {
 			return null;
@@ -294,12 +280,38 @@ public class BlogServiceImpl implements IBlogService {
     public Map<String, List<Blog>> archiveBlog() {
         List<String> years = blogDao.findGroupYear();
         // 先试下hashMap,不能保证按插入排序取出，使用LinkedHashMap 试下
+//        Map<String, List<Blog>> map = new HashMap<>();
         Map<String, List<Blog>> map = new LinkedHashMap<>();
         for (String year : years) {
             map.put(year, blogDao.findByYear(year));
         }
         return map;
     }
+	
+	/**
+	 * 将很多处一致的代码封装起来
+	 * 给list中的blog赋值成员变量
+	 * @param list
+	 */
+	private void setValues(List<Blog> list, int flag) {
+		
+		for (Blog b : list) {
+			b.setType(typeDao.getTypeByColumn("id",b.getType().getId() + ""));
+			if (flag == 1) {
+				b.setUser(userDao.findById(b.getUser().getId()));				
+			}
+			
+			if (flag == 2) {
+				b.setUser(userDao.findById(b.getUser().getId()));				
+				
+				// 这里得先根据博客名找到对应得tags
+				b.setTags(tagDao.listTagByBlogId(b.getId()));
+			}
+			
+		}
+		
+		
+	}
 
 	
 	

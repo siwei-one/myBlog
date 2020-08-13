@@ -6,52 +6,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- namespace和dao的接口对应 -->
 <mapper namespace = "com.yuer.dao.IUserDao">
-	<!--  
-	<resultMap type="Blogger" id="BloggerResult">
-		<result property="id" column="id"/>
-		<result property="userName" column="userName"/>
-		<result property="password" column="password"/>
-		<result property="nickName" column="nickName"/>
-		<result property="sign" column="sign"/>
-		<result property="profile" column="profile"/>
-		<result property="imageName" column="imageName"/>
-	</resultMap>
-	-->
 
-<!-- 	<select id = "getByUserName" parameterType="String" resultMap="BloggerResult">
-		select * from t_blogger where userName = #{userName}
-	</select>
+
+	<!-- 
+		其他几种：
+		LRU：（Least Recently Used）,最近最少使用算法，即如果缓存中容量已经满了，会将缓存中最近做少被使用的缓存记录清除掉，然后添加新的记录；
+		FIFO：（First in first out）,先进先出算法，如果缓存中的容量已经满了，那么会将最先进入缓存中的数据清除掉；
+		Scheduled：指定时间间隔清空算法，该算法会以指定的某一个时间间隔将Cache缓存中的数据清空；
+	 -->	
+	<!--
+    eviction LRU
+    flushInterval缓存时间，以毫秒为单位
+    size缓存大小
+    readOnly如果为false的话，缓存对象必须是可序列化的
+    
+    只读的缓存会给所有调用者返回缓存对象的相同实例，因此这些对象不能被修改的，这样性能会好一些，缺点是因为他是只读的，所以不能被修改。
+    如果设置为false的话，读写的缓存会通过序列化返回该缓存对象的拷贝，因为会把对象进行拷贝，这会慢一些，但是安全，因此默认是 false。
+    -->
+   <!--  <cache eviction="LRU"
+           type="com.yuer.util.MybatisCacheRedisMap"
+           flushInterval="120000"
+           size="1024"
+           readOnly="true"/> -->
+
+
 	
-	<update id="update" parameterType="Blogger">
-		update t_blogger
-		<set>
-			<if test="password!= null and password != ''">
-				password = #{password},
-			</if>
-			<if test="nickName != null and nickName != ''">
-				nickName = #{nickName},
-			</if>
-			<if test="sign != null and sign != ''">
-				sign = #{sign},
-			</if>
-			<if test="profile != null and profile != ''">
-				profile = #{profile},
-			</if>
-			<if test="imageName != null and imageName != ''">
-				imageName = #{imageName},
-			</if>
-		
-		</set>
-			where id = #{id}
-	
-	</update>
-	-->
 	<select id="findById" resultMap="UserMap" parameterType="Long">
-		select * from hi_user u where u.id = #{id}
+		select id, user_name, password, nick_name, email, type, head_image, create_time, update_time
+		from hi_user u where u.id = #{id}
 	</select>
 
+	<!-- 对于只查询一行数据的加一个limit 1减少检索数 -->
 	<select id ="findByUserNameAndPassword" resultMap="UserMap" parameterType="String">
-		select * from hi_user u where u.user_name=#{userName} and u.password = #{password}
+		select id, user_name, password, nick_name, email, type, head_image, create_time, update_time
+		from hi_user u where u.user_name=#{userName} and u.password = #{password} limit 1;
 	</select>
 
 	<resultMap type="User" id="UserMap">

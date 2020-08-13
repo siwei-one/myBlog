@@ -25,6 +25,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			request.getRequestDispatcher("/admin").forward(request, response);
 			return false;
 		}
+		
+		
 
 		return true;
 	}

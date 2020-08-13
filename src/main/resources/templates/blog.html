@@ -84,7 +84,8 @@
 			
 			waypoint用来做滚动监测
 		-->
-	<div class="m-container-small m-padded-tb-big animated fadeIn main" id = "waypoint">
+	<div class="m-container-small m-padded-tb-big animated fadeIn main"
+		id="waypoint">
 		<div class="ui container">
 			<div class="ui top attached segment">
 				<div class="ui link horizontal list">
@@ -151,12 +152,12 @@
 						<div class="ui images" style="font-size: inherit;">
 							<div class="image">
 								<!--rounded bordered 圆角边线-->
-								<img src="img/wechat.jpg" th:src="@{/img/dragonCat.gif}" alt=""
+								<img src="img/wechat.jpg" th:src="@{/img/ALIPAY.jpg}" alt=""
 									class="ui rounded bordered image" style="width: 120px;" />
 								<div id="">支付宝</div>
 							</div>
 							<div class="image">
-								<img src="img/wechat.jpg" th:src="@{/img/dragonCat2.gif}" alt=""
+								<img src="img/wechat.jpg" th:src="@{/img/WECHATPAY.png}" alt=""
 									class="ui rounded bordered image" style="width: 120px;" />
 								<div id="">微信</div>
 							</div>
@@ -178,7 +179,7 @@
 							th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd HH:mm')}">2010-1-6
 								09:08</span></li>
 						<li>版权声明：自由转载-非商用-非衍生-保持署名（创意共享3.0许可证）</li>
-						<li>公众号转载：请在文末添加作者公众号二维码</li>
+						<!-- <li>公众号转载：请在文末添加作者公众号二维码</li> -->
 						</ui>
 
 					</div>
@@ -186,7 +187,7 @@
 						<!-- 这个为啥没用模板的那个th:src还可以？
 						还是说只要去掉static即可？
 						 -->
-						<img src="img/dragonCat2.gif" th:src="@{/img/dragonCat2.gif}"
+						<img src="img/dragonCat2.gif" th:src="@{/img/wechat.jpg}"
 							alt="" class="ui right floated rounded bordered image"
 							style="width: 110px;" />
 					</div>
@@ -205,7 +206,7 @@
 							<h3 class="ui dividing header">评论</h3>
 							<div class="comment" th:each="comment : ${comments}">
 								<a class="avatar"> <img
-									src="https://unsplash.it/100/100?image=1005"
+									src="https://edu-my-video.oss-cn-shenzhen.aliyuncs.com/2020/08/11/cat.jpg"
 									th:src="@{${comment.headPicture}}">
 								</a>
 								<div class="content">
@@ -233,7 +234,7 @@
 									th:if="${#arrays.length(comment.comments)} > 0">
 									<div class="comment" th:each="reply : ${comment.comments}">
 										<a class="avatar"> <img
-											src="https://unsplash.it/100/100?image=1005"
+											src="https://edu-my-video.oss-cn-shenzhen.aliyuncs.com/2020/08/11/cat.jpg"
 											th:src="@{${reply.headPicture}}">
 										</a>
 										<div class="content">
@@ -319,7 +320,8 @@
 	<!--网页侧边的小工具条 要定义为绝对布局，无论怎样滑动都在一个地方
 		 style="display:none" 表示默认不显示
 	-->
-	<div id="toolbar" class="m-fixed m-right-bottom m-padded" style="display:none">
+	<div id="toolbar" class="m-fixed m-right-bottom m-padded"
+		style="display: none">
 		<div class="ui vertical icon buttons">
 			<!--toc作用只是标明这个button,用作点击事件的识别-->
 			<button class="toc ui teal button">目录</button>
@@ -387,8 +389,8 @@
 				<div class="three wide column">
 					<h4 class="ui inverted header m-text-thin m-text-spaced">联系我</h4>
 					<div class="ui inverted link list">
-						<a href="#" class="item m-text-thin">Email：lirenmi@163.com</a> <a
-							href="#" class="item m-text-thin">QQ：865729312</a>
+						<a href="#" class="item m-text-thin"></a> <a
+							href="#" class="item m-text-thin"></a>
 					</div>
 				</div>
 				<div class="seven wide column">
@@ -418,12 +420,27 @@
 	<script
 		src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
 	<script type="text/javascript" src="../static/lib/prism/prism.js"></script>
-	<script type="text/javascript" src="../static/lib/tocbot/tocbot.min.js"></script>
-	<script type="text/javascript" src="../static/lib/qrcode/qrcode.min.js"></script>
 	<!--/*/</th:block>/*/-->
 
+	<!-- 代码高亮 -->
+	<script src="../static/lib/prism/prism.js"
+			th:src="@{/lib/prism/prism.js}"></script>
+
+	<!-- 滚动插件 -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+
+	<!-- 目录生成 -->
+	<script src="../static/lib/tocbot/tocbot.min.js"
+		th:src="@{/lib/tocbot/tocbot.min.js}"></script>
+	<!-- 二维码生成 -->
+	<script src="../static/lib/qrcode/qrcode.min.js"
+		th:src="@{/lib/qrcode/qrcode.min.js}"></script>
+
+	<!-- 滚动监测 -->
 	<script type="text/javascript"
-		src="../static/lib/waypoints/jquery.waypoints.min.js" th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
+		src="../static/lib/waypoints/jquery.waypoints.min.js"
+		th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
 
 	<!-- 要加这个th:inline 才能取到值-->
 	<script th:inline="javascript">

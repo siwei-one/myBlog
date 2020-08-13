@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yuer.entity.Blog;
 import com.yuer.entity.Page;
@@ -33,20 +34,16 @@ public class IndexController {
 	private ITagService tagService;
 	
 	
-	@GetMapping("/")
-	public String index(Model model) {
-		
-		getPage(-1, false,model);
-		getTopOther(model);
-		
-		
-		return "index";
-	}
 	
-	// 这个是点击翻页后触发的
-	@GetMapping("/{page}")
-	public String index1(@PathVariable Integer page, Model model) {
-		getPage(page, true,model);
+	// 这个是点击翻页或默认触发的
+	@GetMapping("/")
+	public String index(@RequestParam(value = "page", required = false) Integer page, Model model) {
+		if (page == null || page == 0) {
+			getPage(-1, false,model);
+		} else {
+			getPage(page, true,model);
+			
+		}
 		getTopOther(model);
 		
 		return "index";
@@ -55,6 +52,9 @@ public class IndexController {
 	@PostMapping("/search")
 	public String search(String query, Model model) {
 		if (query == null || "".equals(query)) {
+			// 为空则发送index的页面数据
+			getPage(-1, false,model);
+			getTopOther(model);
 			return "index";
 		}
 		getSearchPage(query,-1,false,model);
@@ -66,8 +66,8 @@ public class IndexController {
 		return "search";
 	}
 	
-	@GetMapping("/search/{page}")
-	public String search1(@PathVariable Integer page, Model model) {
+	@GetMapping("/search")
+	public String search1(@RequestParam(value = "page", required = false) Integer page, Model model) {
 		getSearchPage(Temp.query,page,true,model);
 		model.addAttribute("query", Temp.query);
 		
@@ -116,13 +116,7 @@ public class IndexController {
 		// 先查出数据条数，再计算得出多少页
 		int total = blogService.getTotalAndPublished();
 		
-		int totalPages;
-		if (total % page1.getSize() == 0) {
-			 totalPages = total / page1.getSize();
-		} else {
-			 totalPages = total / page1.getSize() + 1;
-		}
-		page1.setTotalPages(totalPages);
+		page1.countTotalPages(total);
 
 		if (flag) {
 			page1.setPage(page);
@@ -144,13 +138,7 @@ public class IndexController {
 		// 先查出数据条数，再计算得出多少页
 		int total = blogService.getTotalAndPublishedAndSearch(query);
 		
-		int totalPages;
-		if (total % page1.getSize() == 0) {
-			totalPages = total / page1.getSize();
-		} else {
-			totalPages = total / page1.getSize() + 1;
-		}
-		page1.setTotalPages(totalPages);
+		page1.countTotalPages(total);
 		
 		if (flag) {
 			page1.setPage(page);

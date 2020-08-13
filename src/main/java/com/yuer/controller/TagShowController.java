@@ -61,17 +61,11 @@ public class TagShowController {
 		Page<Blog> page1 = new Page<Blog>();
 		
 		
-		page1.setSize(1);
+		page1.setSize(5);
 		// 先查出数据条数，再计算得出多少页
 		int total = blogService.getTotalAndPublishedAndTagId(id);
 		
-		int totalPages;
-		if (total % page1.getSize() == 0) {
-			totalPages = total / page1.getSize();
-		} else {
-			totalPages = total / page1.getSize() + 1;
-		}
-		page1.setTotalPages(totalPages);
+		page1.countTotalPages(total);
 		
 		if (flag) {
 			page1.setPage(page);

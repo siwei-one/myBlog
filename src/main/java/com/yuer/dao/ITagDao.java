@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.yuer.entity.Tag;
+import com.yuer.entity.Type;
 
 public interface ITagDao {
 
@@ -18,7 +19,9 @@ public interface ITagDao {
 	Integer updateTag(@Param("id") Long id, @Param("tagName") String tagName);
 
 	// 查
-	Tag getTagById(Long id);
+	
+	// 这里根据一个参数查优化一下，根据id,tag_name直接传即可
+	Tag getTagByColumn(@Param("column") String column, @Param("value") String value);
 
 	// 全查出来
 	List<Tag> listTag();
@@ -39,8 +42,6 @@ public interface ITagDao {
 	// 获取总数据量
 	Integer getTotal();
 	
-	// 根据TagName获取
-	Tag getTagByTagName(String tagName);
 	
 	
 	

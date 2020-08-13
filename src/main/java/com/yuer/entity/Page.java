@@ -98,6 +98,18 @@ public class Page<T> {
 	public Page() {
 		start = (page - 1) * size;
 	}
+	
+	// 根据数据条数和size计算总页数并set
+	public void countTotalPages(int total) {
+		if (total % getSize() == 0) {
+			totalPages = total / getSize();
+		} else {
+			totalPages = total / getSize() + 1;
+		}
+		setTotalPages(totalPages);
+		
+		
+	}
 
 	
 
